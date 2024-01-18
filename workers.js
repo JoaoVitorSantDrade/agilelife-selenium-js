@@ -6,6 +6,7 @@ import assert from 'assert';
 async function criarSala() { 
     let driver = new Builder().forBrowser(Browser.CHROME).build();
     try {
+        console.log("Executando headless")
         let link = ""
 
         let tabs = []

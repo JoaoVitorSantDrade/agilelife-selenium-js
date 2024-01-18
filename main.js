@@ -3,7 +3,8 @@ import 'dotenv/config';
 
 
 function createWorker(i) {
-    return new Promise(function(resolve) {
+    return new Promise(function (resolve) {
+        console.log("Criando sala " + i)
         var worker = new Worker.Worker('./workers.js');
         worker.on('message',(msg) => {
             resolve(msg.data);
