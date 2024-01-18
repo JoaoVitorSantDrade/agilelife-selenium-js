@@ -2,7 +2,8 @@ import { Builder, Browser, By, Key, until } from 'selenium-webdriver';
 import 'dotenv/config';
 import assert from 'assert';
 
-
+const Participantes = 3
+const Url = 'https://agile-life-web.onrender.com/'
 async function criarSala() { 
     let driver = new Builder().forBrowser(Browser.CHROME).build();
     try {
@@ -12,7 +13,7 @@ async function criarSala() {
         let tabs = []
         driver.sleep((Math.random() * 1000) + 500)
         
-        await driver.get(process.env.URL);
+        await driver.get(Url);
         await driver.wait(until.elementLocated(By.xpath('//button[contains(text(), "Criar Sala")]'), 10000)).click();
         await driver.wait(until.elementLocated(By.id('input-nick'))).sendKeys("Host");
         await driver.wait(until.elementLocated(By.xpath('//button[contains(text(), "Criar Sala e Entrar")]'), 10000)).click();
@@ -20,7 +21,7 @@ async function criarSala() {
         link = await input_com_link.getAttribute('value')
         tabs.push(await driver.getWindowHandle())
         let participantes_nome = ['Host']
-        for (let i = 1; i < process.env.PARTICIPANTES_POR_SALA; i++) {
+        for (let i = 1; i < Participantes; i++) {
             participantes_nome.push("P-" + i)
             await driver.switchTo().newWindow('tab');
             await driver.get(link);
@@ -28,7 +29,7 @@ async function criarSala() {
             await novoParticipante(participantes_nome[i], driver)
         }
         await driver.switchTo().window(tabs[0])
-        for (let i = 0; i < process.env.PARTICIPANTES_POR_SALA; i++) {
+        for (let i = 0; i < Participantes; i++) {
             let selector = await driver.wait(until.elementLocated(By.id('select_' + i)), 10000)
             await selector.click()
             let options = await selector.findElements(By.tagName('option'))
@@ -36,7 +37,7 @@ async function criarSala() {
         }
 
         await driver.wait(until.elementLocated(By.xpath('//button[contains(text(), "Iniciar partida")]'), 10000)).click();
-        for (let i = 0; i < process.env.PARTICIPANTES_POR_SALA; i++) {
+        for (let i = 0; i < Participantes; i++) {
             await driver.switchTo().window(tabs[i])
             assert(await driver.wait(until.elementLocated(By.className('Tabuleiro')), 10000).isDisplayed(), "Tabuleiro está sendo exibido")
         }

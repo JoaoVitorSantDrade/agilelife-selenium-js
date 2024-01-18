@@ -2,6 +2,9 @@ import Worker from 'worker_threads'
 import 'dotenv/config';
 
 
+const Salas = 3;
+
+
 function createWorker(i) {
     return new Promise(function (resolve) {
         console.log("Criando sala " + i)
@@ -21,7 +24,7 @@ function createWorker(i) {
 var promises = [];
 
 async function main() {
-    for (let i = 0; i < process.env.NUM_SALAS; i++){
+    for (let i = 0; i < Salas; i++){
         promises.push(createWorker(i))
     }
 }
